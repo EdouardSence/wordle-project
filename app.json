@@ -1,17 +1,16 @@
 {
   "expo": {
-    "main": "./App.tsx",
     "name": "wordleapp",
     "slug": "wordleapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#121213"
     },
     "ios": {
       "supportsTablet": true
@@ -19,10 +18,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#121213"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "package": "com.wordleapp.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
