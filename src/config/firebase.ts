@@ -2,9 +2,11 @@ import { initializeApp, getApps } from "firebase/app";
 import {
   initializeAuth,
   getAuth,
+  getReactNativePersistence
 } from "firebase/auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
+
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -29,20 +31,7 @@ try {
   } else {
     // For React Native (iOS/Android), use custom AsyncStorage persistence
     auth = initializeAuth(firebaseApp, {
-      persistence: [
-        {
-          type: "LOCAL",
-          async _get(key: string) {
-            return AsyncStorage.getItem(key);
-          },
-          async _set(key: string, value: string) {
-            await AsyncStorage.setItem(key, value);
-          },
-          async _remove(key: string) {
-            await AsyncStorage.removeItem(key);
-          },
-        },
-      ] as any,
+      persistence: getReactNativePersistence(ReactNativeAsyncStorage) as any,
     });
   }
 } catch (error) {

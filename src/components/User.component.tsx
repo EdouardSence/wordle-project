@@ -2,6 +2,8 @@ import Avatar from "@mui/material/Avatar";
 import { auth } from "../config/firebase";
 import Button from "@mui/material/Button";
 import ButtonBase from "@mui/material/ButtonBase";
+import Card from "@mui/material/Card";
+import { StyleSheet } from "react-native";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -48,6 +50,23 @@ export default function User() {
       <ButtonBase onClick={() => {}}>
         <Avatar {...stringAvatar(auth.currentUser?.email || "")} />
       </ButtonBase>
+      <Card style={styles.Card}>
+        <div>{auth.currentUser?.email}</div>
+        <ButtonBase onClick={() => {}}>Se déconnecter</ButtonBase>
+      </Card>
     </div>
   );
+
 }
+
+  const styles = StyleSheet.create({
+    Card: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      padding: 16,
+      marginTop: 8,
+      backgroundColor: "#1A1A1B",
+      borderRadius: 12,
+    },
+  });
