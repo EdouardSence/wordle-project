@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@firebase/app':
+        specifier: ^0.14.4
+        version: 0.14.4
+      '@firebase/auth':
+        specifier: ^1.11.0
+        version: 1.11.0(@firebase/app@0.14.4)(@react-native-async-storage/async-storage@2.2.0(react-native@0.81.4(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)))
       '@react-native-async-storage/async-storage':
         specifier: ^2.2.0
         version: 2.2.0(react-native@0.81.4(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))
