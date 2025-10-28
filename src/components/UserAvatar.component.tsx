@@ -35,6 +35,15 @@ export default function UserAvatar() {
       >
         <Pressable style={styles.overlay} onPress={() => setVisible(false)}>
           <View style={styles.menu}>
+            <Text style={styles.menuText}>Connecté en tant que</Text>
+            <Text
+              style={[
+                styles.menuText,
+                { fontWeight: "bold", marginBottom: 10 },
+              ]}
+            >
+              {auth.currentUser?.email}
+            </Text>
             <Pressable
               style={styles.menuItem}
               onPress={() => handleChangePassword()}
