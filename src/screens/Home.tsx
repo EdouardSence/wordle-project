@@ -9,41 +9,30 @@ import { auth } from "../config/firebase";
 import { signOut } from "@firebase/auth";
 import UserAvatar from "../components/UserAvatar.component";
 import { faker } from "@faker-js/faker";
+import Guess from "../components/Guess.component";
+import * as z from "zod";
 
 export default function HomeScreen() {
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error("Erreur lors de la déconnexion:", error);
-    }
-  };
-  const randomWord = faker.lorem.word();
+  const randomWord: string = faker.lorem.word();
 
   return (
-    <>
-      <View style={styles.container}>
-        <View style={styles.topRight}>
-          <UserAvatar />
-        </View>
-
-        <View style={styles.header}>
-          <Text style={styles.title}>🎯 WORDLE</Text>
-          <Text style={styles.subtitle}>Bienvenue !</Text>
-          <Text style={styles.userEmail}>{auth.currentUser?.email}</Text>
-        </View>
-
-        <View style={styles.content}>
-          <Text style={styles.message}>{randomWord}</Text>
-        </View>
-
-        <TextInput style={styles.input} placeholder="Type here..." />
-
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutText}>Se déconnecter</Text>
-        </TouchableOpacity>
+    <View style={styles.container}>
+      <View style={styles.topRight}>
+        <UserAvatar />
       </View>
-    </>
+
+      <View style={styles.header}>
+        <Text style={styles.title}>🎯 WORDLE</Text>
+      </View>
+
+      <View style={styles.content}>
+        <Text style={styles.message}>{randomWord}</Text>
+      </View>
+
+      <View>
+        <Guess word={randomWord} />
+      </View>
+    </View>
   );
 }
 
@@ -113,5 +102,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: 16,
     color: "#FFFFFF",
+    width: "100%",
+    alignSelf: "center",
   },
 });

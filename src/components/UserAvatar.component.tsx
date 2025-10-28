@@ -2,6 +2,8 @@ import { Avatar } from "react-native-paper";
 import { auth } from "../config/firebase";
 import { Pressable, StyleSheet, Modal, View, Text } from "react-native";
 import { useState } from "react";
+import { signOut } from "@firebase/auth";
+import { set } from "zod";
 
 function getInitials(email: string | undefined): string {
   if (!email) return "NA";
@@ -12,9 +14,13 @@ function getInitials(email: string | undefined): string {
 export default function UserAvatar() {
   const [visible, setVisible] = useState(false);
 
-  const handleDisconnect = () => {
+  const handleLogout = async () => {
     setVisible(false);
-    console.log("Déconnexion demandée");
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion:", error);
+    }
   };
   const handleChangePassword = () => {
     setVisible(false);
@@ -50,7 +56,7 @@ export default function UserAvatar() {
             >
               <Text style={styles.menuText}>Changer le mot de passe</Text>
             </Pressable>
-            <Pressable style={styles.menuItem} onPress={handleDisconnect}>
+            <Pressable style={styles.menuItem} onPress={handleLogout}>
               <Text style={styles.menuText}>Se déconnecter</Text>
             </Pressable>
           </View>
