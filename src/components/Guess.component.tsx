@@ -1,6 +1,9 @@
 import React from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 
+export const keyPressed = (key: string) => {
+  console.log("Touche appuyée :", key);
+};
 const Guess = ({ word }: { word: string }) => {
   const handleChange = (index: number) => (text: string) => {
     if (text.length === 1 && index < word.length - 1) {

@@ -1,14 +1,15 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { keyPressed } from "./Guess.component";
 
 const keysFR = [
   ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P"],
   ["Q", "S", "D", "F", "G", "H", "J", "K", "L", "M"],
-  ["W", "X", "C", "V", "B", "N"],
+  ["ENTER", "W", "X", "C", "V", "B", "N", "⌫"],
 ];
 
 export default function Keyboard() {
   const handlePress = (key: string) => () => {
-    console.log("Pressed key:", key);
+    keyPressed(key);
   };
   return (
     <View>
