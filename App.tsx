@@ -6,6 +6,7 @@ import { onAuthStateChanged, User } from "@firebase/auth";
 import { auth } from "./src/config/firebase";
 import HomeScreen from "./src/screens/Home";
 import LoginScreen from "./src/screens/Login";
+import { PaperProvider } from "react-native-paper";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -35,33 +36,35 @@ function RootStack() {
   }
 
   return (
-    <Stack.Navigator
-      initialRouteName={user ? "Home" : "Login"}
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: "#121213",
-        },
-        headerTintColor: "#fff",
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
-        animation: "fade",
-      }}
-    >
-      {user ? (
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ headerShown: false }}
-        />
-      ) : (
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-      )}
-    </Stack.Navigator>
+    <PaperProvider>
+      <Stack.Navigator
+        initialRouteName={user ? "Home" : "Login"}
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: "#121213",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+          animation: "fade",
+        }}
+      >
+        {user ? (
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+        )}
+      </Stack.Navigator>
+    </PaperProvider>
   );
 }
 

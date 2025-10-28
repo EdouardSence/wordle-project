@@ -7,9 +7,9 @@ import {
 } from "react-native";
 import { auth } from "../config/firebase";
 import { signOut } from "@firebase/auth";
+import UserAvatar from "../components/UserAvatar.component";
+import { faker } from "@faker-js/faker";
 
-// import { faker } from "@faker-js/faker";
-// import User from "../components/User.component";
 export default function HomeScreen() {
   const handleLogout = async () => {
     try {
@@ -18,23 +18,23 @@ export default function HomeScreen() {
       console.error("Erreur lors de la déconnexion:", error);
     }
   };
-  // const randomWord = faker.lorem.word();
+  const randomWord = faker.lorem.word();
 
   return (
     <>
       <View style={styles.container}>
-        {/* <View style={styles.topRight}>
-            <User />
-          </View> */}
+        <View style={styles.topRight}>
+          <UserAvatar />
+        </View>
 
         <View style={styles.header}>
           <Text style={styles.title}>🎯 WORDLE</Text>
           <Text style={styles.subtitle}>Bienvenue !</Text>
           <Text style={styles.userEmail}>{auth.currentUser?.email}</Text>
         </View>
-        
+
         <View style={styles.content}>
-          <Text style={styles.message}>{"TEST"}</Text>
+          <Text style={styles.message}>{randomWord}</Text>
         </View>
 
         <TextInput style={styles.input} placeholder="Type here..." />
@@ -55,9 +55,8 @@ const styles = StyleSheet.create({
     paddingTop: 60,
   },
   topRight: {
-    position: "absolute",
-    top: 40,
-    right: 20,
+    position: "relative",
+    alignItems: "flex-end",
   },
   header: {
     alignItems: "center",
