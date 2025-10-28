@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged, User } from "@firebase/auth";
 import { auth } from "./src/config/firebase";
 import HomeScreen from "./src/screens/Home";
 import LoginScreen from "./src/screens/Login";

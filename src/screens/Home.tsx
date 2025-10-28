@@ -6,10 +6,10 @@ import {
   TextInput,
 } from "react-native";
 import { auth } from "../config/firebase";
-import { signOut } from "firebase/auth";
+import { signOut } from "@firebase/auth";
 
-import { faker } from "@faker-js/faker";
-import User from "../components/User.component";
+// import { faker } from "@faker-js/faker";
+// import User from "../components/User.component";
 export default function HomeScreen() {
   const handleLogout = async () => {
     try {
@@ -18,14 +18,14 @@ export default function HomeScreen() {
       console.error("Erreur lors de la déconnexion:", error);
     }
   };
-  const randomWord = faker.lorem.word();
+  // const randomWord = faker.lorem.word();
 
   return (
     <>
       <View style={styles.container}>
-        <View style={styles.topRight}>
+        {/* <View style={styles.topRight}>
             <User />
-          </View>
+          </View> */}
 
         <View style={styles.header}>
           <Text style={styles.title}>🎯 WORDLE</Text>
@@ -34,7 +34,7 @@ export default function HomeScreen() {
         </View>
         
         <View style={styles.content}>
-          <Text style={styles.message}>{randomWord}</Text>
+          <Text style={styles.message}>{"TEST"}</Text>
         </View>
 
         <TextInput style={styles.input} placeholder="Type here..." />
