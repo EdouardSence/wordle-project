@@ -11,6 +11,7 @@ import UserAvatar from "../components/UserAvatar.component";
 import { faker } from "@faker-js/faker";
 import Guess from "../components/Guess.component";
 import * as z from "zod";
+import Keyboard from "../components/keyboard.component";
 
 export default function HomeScreen() {
   const randomWord: string = faker.lorem.word();
@@ -29,8 +30,12 @@ export default function HomeScreen() {
         <Text style={styles.message}>{randomWord}</Text>
       </View>
 
-      <View>
+      <View style={styles.guessContainer}>
         <Guess word={randomWord} />
+      </View>
+
+      <View style={styles.keyboardContainer}>
+        <Keyboard />
       </View>
     </View>
   );
@@ -42,6 +47,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#121213",
     padding: 24,
     paddingTop: 60,
+  },
+  guessContainer: {
+    width: "100%",
+    marginBottom: 200,
   },
   topRight: {
     position: "relative",
@@ -104,5 +113,8 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     width: "100%",
     alignSelf: "center",
+  },
+  keyboardContainer: {
+    marginBottom: 40,
   },
 });

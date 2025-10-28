@@ -2,10 +2,25 @@ import React from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 
 const Guess = ({ word }: { word: string }) => {
+  const handleChange = (index: number) => (text: string) => {
+    if (text.length === 1 && index < word.length - 1) {
+      inputRefs[index + 1].current?.focus();
+    }
+  };
   let inputs = [];
+  let inputRefs = [React.useRef<TextInput | null>(null)];
   if (word !== undefined) {
     for (let i = 0; i < word?.length; i++) {
-      inputs.push(<TextInput key={i} style={styles.input} maxLength={1} />);
+      inputRefs.push(React.useRef<TextInput | null>(null));
+      inputs.push(
+        <TextInput
+          key={i}
+          style={styles.input}
+          maxLength={1}
+          ref={inputRefs[i]}
+          onChangeText={handleChange(i)}
+        />
+      );
     }
   }
 
