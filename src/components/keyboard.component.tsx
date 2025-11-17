@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { keyPressed } from "./Guess.component";
+import { keyPressed } from "../providers/Logic.provider";
+import { useState } from "react";
 
 const keysFR = [
   ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -8,15 +9,21 @@ const keysFR = [
 ];
 
 export default function Keyboard() {
+
   const handlePress = (key: string) => () => {
     keyPressed(key);
   };
+
+  const [keys, setKeys] = useState<string[]>([]);
   return (
     <View>
       {keysFR.map((row, rowIndex) => (
         <View key={rowIndex} style={styles.container}>
           {row.map((key) => (
-            <TouchableOpacity onPress={handlePress(key)} key={key}>
+            <TouchableOpacity
+              onPress={() => setKeys((prevKeys) => [...prevKeys, key])}
+              key={key}
+            >
               <Text style={styles.key}>{key}</Text>
             </TouchableOpacity>
           ))}

@@ -11,10 +11,13 @@ import UserAvatar from "../components/UserAvatar.component";
 import { faker } from "@faker-js/faker";
 import Guess from "../components/Guess.component";
 import * as z from "zod";
-import Keyboard from "../components/keyboard.component";
+import Keyboard from "../components/Keyboard.component";
+import { LogicProvider } from "../providers/Logic.provider";
+import { useState } from "react";
 
 export default function HomeScreen() {
   const randomWord: string = faker.lorem.word();
+  const [keys, setKeys] = useState<string[]>([]);
 
   return (
     <View style={styles.container}>
@@ -30,13 +33,15 @@ export default function HomeScreen() {
         <Text style={styles.message}>{randomWord}</Text>
       </View>
 
-      <View style={styles.guessContainer}>
-        <Guess word={randomWord} />
-      </View>
+      <LogicProvider>
+        <View style={styles.guessContainer}>
+          {/* <Guess word={randomWord} keys={keys} setKeys={setKeys} /> */}
+        </View>
 
-      <View style={styles.keyboardContainer}>
-        <Keyboard />
-      </View>
+        <View style={styles.keyboardContainer}>
+          <Keyboard />
+        </View>
+      </LogicProvider>
     </View>
   );
 }
