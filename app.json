@@ -16,14 +16,26 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./src/config/google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#121213"
       },
-      "package": "com.wordleapp.app"
+      "package": "com.esence.wordle",
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "addba921-4d46-4936-9607-4b674853aad0"
+      }
     }
   }
 }
