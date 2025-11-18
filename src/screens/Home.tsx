@@ -1,17 +1,11 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-} from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import UserAvatar from "../components/UserAvatar.component";
 import { faker } from "@faker-js/faker";
 import Guess from "../components/Guess.component";
 import Keyboard from "../components/Keyboard.component";
-import { LogicProvider } from "../providers/Logic.provider";
+import { LogicProvider, randomWord } from "../providers/Logic.provider";
 
 export default function HomeScreen() {
-  const randomWord: string = faker.lorem.word();
-
   return (
     <View style={styles.container}>
       <View style={styles.topRight}>
@@ -28,7 +22,7 @@ export default function HomeScreen() {
 
       <LogicProvider>
         <View style={styles.guessContainer}>
-          <Guess word={randomWord} />
+          <Guess/>
         </View>
 
         <View style={styles.keyboardContainer}>

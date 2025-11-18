@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { View, TextInput, StyleSheet, Text } from "react-native";
-import { KeyContext } from "../providers/Logic.provider";
+import { KeyContext, randomWord } from "../providers/Logic.provider";
 
-const Guess = ({ word }: { word: string }) => {
+const Guess = () => {
   const { keys, setKeys } = useContext(KeyContext);
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
-        {Array.from({ length: word.length }).map((_, index) => (
+        {Array.from({ length: randomWord.length }).map((_, index) => (
           <Text key={index} style={styles.input}>
             {keys[index]}{" "}
           </Text>
