@@ -14,15 +14,12 @@ export default function HomeScreen() {
 
       <View style={styles.header}>
         <Text style={styles.title}>🎯 WORDLE</Text>
-      </View>
-
-      <View style={styles.content}>
         <Text style={styles.message}>{randomWord}</Text>
       </View>
 
       <LogicProvider>
         <View style={styles.guessContainer}>
-          <Guess/>
+          <Guess />
         </View>
 
         <View style={styles.keyboardContainer}>
@@ -41,18 +38,20 @@ const styles = StyleSheet.create({
     paddingTop: 60,
   },
   guessContainer: {
-    flex: 1,
+    flex: 0,
+    marginBottom: 20,
   },
   topRight: {
     position: "relative",
     alignItems: "flex-end",
+    marginBottom: 20,
   },
   header: {
     alignItems: "center",
-    marginBottom: 40,
+    marginBottom: 20,
   },
   title: {
-    fontSize: 48,
+    fontSize: 38,
     fontWeight: "bold",
     color: "#FFFFFF",
     letterSpacing: 6,
@@ -69,16 +68,11 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontWeight: "600",
   },
-  content: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   message: {
-    fontSize: 16,
+    fontSize: 13,
     color: "#818384",
     textAlign: "center",
-    lineHeight: 24,
+    marginTop: 4,
   },
   logoutButton: {
     height: 56,
@@ -106,6 +100,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   keyboardContainer: {
-    marginBottom: 40,
+    marginTop: "auto",
+    paddingBottom: 20,
   },
 });
