@@ -2,22 +2,15 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableOpacity,
-  TextInput,
 } from "react-native";
-import { auth } from "../config/firebase";
-import { signOut } from "@firebase/auth";
 import UserAvatar from "../components/UserAvatar.component";
 import { faker } from "@faker-js/faker";
 import Guess from "../components/Guess.component";
-import * as z from "zod";
 import Keyboard from "../components/Keyboard.component";
 import { LogicProvider } from "../providers/Logic.provider";
-import { useState } from "react";
 
 export default function HomeScreen() {
   const randomWord: string = faker.lorem.word();
-  const [keys, setKeys] = useState<string[]>([]);
 
   return (
     <View style={styles.container}>
@@ -35,7 +28,7 @@ export default function HomeScreen() {
 
       <LogicProvider>
         <View style={styles.guessContainer}>
-          {/* <Guess word={randomWord} keys={keys} setKeys={setKeys} /> */}
+          <Guess word={randomWord} />
         </View>
 
         <View style={styles.keyboardContainer}>
@@ -54,8 +47,7 @@ const styles = StyleSheet.create({
     paddingTop: 60,
   },
   guessContainer: {
-    width: "100%",
-    marginBottom: 200,
+    flex: 1,
   },
   topRight: {
     position: "relative",

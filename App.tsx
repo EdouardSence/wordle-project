@@ -8,6 +8,8 @@ import HomeScreen from "./src/screens/Home";
 import LoginScreen from "./src/screens/Login";
 import { PaperProvider } from "react-native-paper";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { getToken } from "@firebase/messaging";
+// import { messaging } from "./src/config/firebase";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -29,6 +31,27 @@ function RootStack() {
 
     return unsubscribe;
   }, []);
+
+  // async function requestPermission() {
+  //   //requesting permission using Notification API
+  //   const permission = await Notification.requestPermission();
+
+  //   if (permission === "granted") {
+  //     const token = await getToken(messaging, {
+  //       vapidKey: process.env.EXPO_PUBLIC_FIREBASE_VAPID_KEY,
+  //     });
+
+  //     //We can send token to server
+  //     console.log("Token generated : ", token);
+  //   } else if (permission === "denied") {
+  //     //notifications are blocked
+  //     alert("You denied for the notification");
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   requestPermission();
+  // }, []);
 
   if (loading) {
     return (

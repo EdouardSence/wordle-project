@@ -1,33 +1,21 @@
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useState } from "react";
 import * as z from "zod";
 
-const LogicContextType = z.object({
-  keys: z.array(z.string()),
-});
-export type LogicContextType = z.infer<typeof LogicContextType>;
-export const LogicContext = createContext<LogicContextType | undefined>(undefined);
+interface KeyContextType {
+  keys: string[];
+  setKeys: (keys: string[]) => void;
+}
 
-export const keyPressed = (key: string) => {
-  switch (key) {
-    case "ENTER":
-      // Gérer la soumission du mot
-      console.log("Mot soumis");
-      break;
-    case "⌫":
-      // Gérer la suppression du caractère précédent
-      console.log("Caractère supprimé");
-      break;
-    default:
-      // Ajouter le caractère à l'input focusée
-      console.log(`Touche pressée: ${key}`);
-      break;
-  }
-};
+export const KeyContext = createContext<KeyContextType>({
+  keys: [],
+  setKeys: () => {},
+});
 
 export const LogicProvider = ({ children }: { children: ReactNode }) => {
+  const [keys, setKeys] = useState<string[]>([]);
   return (
-    <LogicContext.Provider value={{ keys: [] }}>
+    <KeyContext.Provider value={{ keys, setKeys }}>
       {children}
-    </LogicContext.Provider>
+    </KeyContext.Provider>
   );
 };

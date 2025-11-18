@@ -7,6 +7,8 @@ import {
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 
+// import { getMessaging } from "@firebase/messaging";
+
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -39,4 +41,8 @@ try {
   auth = getAuth(firebaseApp);
 }
 
+// Export the initialized auth instance
 export { auth };
+
+// Initialize Firebase Messaging
+// export const messaging = getMessaging(firebaseApp);

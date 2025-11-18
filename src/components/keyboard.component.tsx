@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { keyPressed } from "../providers/Logic.provider";
-import { useState } from "react";
+import { use, useContext, useState } from "react";
+import { KeyContext } from "../providers/Logic.provider";
 
 const keysFR = [
   ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -9,21 +9,28 @@ const keysFR = [
 ];
 
 export default function Keyboard() {
+  const { keys, setKeys } = useContext(KeyContext);
 
   const handlePress = (key: string) => () => {
-    keyPressed(key);
+    switch (key) {
+      case "ENTER":
+        // Handle enter key
+        break;
+      case "⌫":
+        setKeys(keys.slice(0, -1));
+        break;
+      default:
+        setKeys([...keys, key]);
+        break;
+    }
   };
 
-  const [keys, setKeys] = useState<string[]>([]);
   return (
     <View>
       {keysFR.map((row, rowIndex) => (
         <View key={rowIndex} style={styles.container}>
           {row.map((key) => (
-            <TouchableOpacity
-              onPress={() => setKeys((prevKeys) => [...prevKeys, key])}
-              key={key}
-            >
+            <TouchableOpacity onPress={handlePress(key)} key={key}>
               <Text style={styles.key}>{key}</Text>
             </TouchableOpacity>
           ))}
