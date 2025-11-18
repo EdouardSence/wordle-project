@@ -7,6 +7,7 @@ import { auth } from "./src/config/firebase";
 import HomeScreen from "./src/screens/Home";
 import LoginScreen from "./src/screens/Login";
 import { PaperProvider } from "react-native-paper";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -17,6 +18,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootStack() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const queryClient = new QueryClient();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -36,35 +39,37 @@ function RootStack() {
   }
 
   return (
-    <PaperProvider>
-      <Stack.Navigator
-        initialRouteName={user ? "Home" : "Login"}
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: "#121213",
-          },
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontWeight: "bold",
-          },
-          animation: "fade",
-        }}
-      >
-        {user ? (
-          <Stack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{ headerShown: false }}
-          />
-        ) : (
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-        )}
-      </Stack.Navigator>
-    </PaperProvider>
+    <QueryClientProvider client={queryClient}>
+      <PaperProvider>
+        <Stack.Navigator
+          initialRouteName={user ? "Home" : "Login"}
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: "#121213",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            animation: "fade",
+          }}
+        >
+          {user ? (
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{ headerShown: false }}
+            />
+          ) : (
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+          )}
+        </Stack.Navigator>
+      </PaperProvider>
+    </QueryClientProvider>
   );
 }
 
