@@ -22,7 +22,7 @@ export default function HomeScreen() {
 
       <LogicProvider>
         <View style={styles.guessContainer}>
-          <Guess/>
+          <Guess />
         </View>
 
         <View style={styles.keyboardContainer}>

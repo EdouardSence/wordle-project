@@ -1,6 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { use, useContext, useState } from "react";
-import { KeyContext, randomWord } from "../providers/Logic.provider";
+import { useContext } from "react";
+import {
+  KeyContext,
+  randomWord,
+  LetterStatus,
+} from "../providers/Logic.provider";
 
 const keysFR = [
   ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -8,13 +12,26 @@ const keysFR = [
   ["ENTER", "W", "X", "C", "V", "B", "N", "⌫"],
 ];
 
+const getKeyBackgroundColor = (status: LetterStatus | undefined): string => {
+  switch (status) {
+    case "correct":
+      return "#538D4E"; // Vert
+    case "present":
+      return "#B59F3B"; // Jaune
+    case "absent":
+      return "#3A3A3C"; // Gris foncé
+    default:
+      return "#818384"; // Gris par défaut
+  }
+};
+
 export default function Keyboard() {
-  const { keys, setKeys } = useContext(KeyContext);
+  const { keys, setKeys, keyboardColors, submitGuess } = useContext(KeyContext);
 
   const handlePress = (key: string) => () => {
     switch (key) {
       case "ENTER":
-        // Handle enter key
+        submitGuess();
         break;
       case "⌫":
         setKeys(keys.slice(0, -1));
@@ -31,11 +48,18 @@ export default function Keyboard() {
     <View>
       {keysFR.map((row, rowIndex) => (
         <View key={rowIndex} style={styles.container}>
-          {row.map((key) => (
-            <TouchableOpacity onPress={handlePress(key)} key={key}>
-              <Text style={styles.key}>{key}</Text>
-            </TouchableOpacity>
-          ))}
+          {row.map((key) => {
+            const isSpecialKey = key === "ENTER" || key === "⌫";
+            const backgroundColor = isSpecialKey
+              ? "#818384"
+              : getKeyBackgroundColor(keyboardColors[key]);
+
+            return (
+              <TouchableOpacity onPress={handlePress(key)} key={key}>
+                <Text style={[styles.key, { backgroundColor }]}>{key}</Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
       ))}
     </View>
@@ -49,12 +73,14 @@ const styles = StyleSheet.create({
   },
   key: {
     color: "#FFFFFF",
-    fontSize: 20,
-    margin: 4,
-    padding: 8,
-    borderWidth: 1,
-    borderColor: "#3A3A3C",
-    borderRadius: 8,
+    fontSize: 18,
+    margin: 3,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    minWidth: 30,
+    borderRadius: 4,
     textAlign: "center",
+    fontWeight: "bold",
+    overflow: "hidden",
   },
 });
