@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { use, useContext, useState } from "react";
-import { KeyContext } from "../providers/Logic.provider";
+import { KeyContext, randomWord } from "../providers/Logic.provider";
 
 const keysFR = [
   ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -20,7 +20,9 @@ export default function Keyboard() {
         setKeys(keys.slice(0, -1));
         break;
       default:
-        setKeys([...keys, key]);
+        if (keys.length < randomWord.length) {
+          setKeys([...keys, key]);
+        }
         break;
     }
   };
