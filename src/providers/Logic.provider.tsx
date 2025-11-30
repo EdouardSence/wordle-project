@@ -11,6 +11,8 @@ export interface GuessRow {
   submitted: boolean;
 }
 
+export type GameStatus = "playing" | "won" | "lost";
+
 interface KeyContextType {
   keys: string[];
   setKeys: (keys: string[]) => void;
@@ -23,6 +25,8 @@ interface KeyContextType {
     React.SetStateAction<Record<string, LetterStatus>>
   >;
   submitGuess: () => void;
+  gameStatus: GameStatus;
+  setGameStatus: React.Dispatch<React.SetStateAction<GameStatus>>;
 }
 
 export const KeyContext = createContext<KeyContextType>({
@@ -35,6 +39,8 @@ export const KeyContext = createContext<KeyContextType>({
   keyboardColors: {},
   setKeyboardColors: () => {},
   submitGuess: () => {},
+  gameStatus: "playing",
+  setGameStatus: () => {},
 });
 
 const createEmptyGuesses = (): GuessRow[] => {
@@ -52,6 +58,7 @@ export const LogicProvider = ({ children }: { children: ReactNode }) => {
   const [keyboardColors, setKeyboardColors] = useState<
     Record<string, LetterStatus>
   >({});
+  const [gameStatus, setGameStatus] = useState<GameStatus>("playing");
 
   const submitGuess = () => {
     if (keys.length !== randomWord.length || currentRow >= 6) return;
@@ -111,6 +118,21 @@ export const LogicProvider = ({ children }: { children: ReactNode }) => {
       return newGuesses;
     });
 
+    // Vérifier la victoire
+    const isWin = newStatuses.every((status) => status === "correct");
+    if (isWin) {
+      setGameStatus("won");
+      setKeys([]);
+      return;
+    }
+
+    // Vérifier la défaite
+    if (currentRow === 5) {
+      setGameStatus("lost");
+      setKeys([]);
+      return;
+    }
+
     // Passer à la ligne suivante
     setCurrentRow((prev) => prev + 1);
     setKeys([]);
@@ -128,6 +150,8 @@ export const LogicProvider = ({ children }: { children: ReactNode }) => {
         keyboardColors,
         setKeyboardColors,
         submitGuess,
+        gameStatus,
+        setGameStatus,
       }}
     >
       {children}
