@@ -47,29 +47,24 @@ export async function registerForPushNotificationsAsync() {
       return;
     }
 
-    // Sur Android avec expo-dev-client, getExpoPushTokenAsync nécessite FCM
-    // Pour le dev, on peut skip ou utiliser Expo Go
-    if (Platform.OS === "android" && __DEV__) {
-      console.log("⚠️ Push notifications désactivées en dev Android");
-      console.log("💡 Pour tester les notifications:");
-      console.log("   1. Utilisez Expo Go (pas expo-dev-client)");
-      console.log("   2. Ou buildez avec EAS: eas build --profile preview");
-      return;
-    }
-
     token = (
       await Notifications.getExpoPushTokenAsync({
         projectId,
       })
     ).data;
-    console.log("✅ Expo Push Token:", token);
-    console.log("📌 Utilisez ce token pour envoyer des notifications depuis votre backend Firebase");
+    console.log("✅✅✅ EXPO PUSH TOKEN ✅✅✅");
+    console.log(token);
+    console.log("✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅");
+    console.log("📌 Copiez ce token et testez sur: https://expo.dev/notifications");
 
     // Sauvegarder le token pour l'utilisateur connecté
     await sendTokenToServer(token);
   } catch (error) {
-    console.error("❌ Erreur lors de l'obtention du token:", error);
-    console.log("💡 Les notifications push nécessitent Expo Go ou un build de production");
+    console.log("⚠️ Token push non disponible");
+    console.log("💡 Utilisez Expo Go pour obtenir le token:");
+    console.log("   1. Fermez l'app dev client");
+    console.log("   2. Lancez: pnpm expo start");
+    console.log("   3. Scannez le QR avec Expo Go");
   }
 
   return token;
