@@ -1,19 +1,15 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useEffect, useState, useRef } from "react";
-import { View, ActivityIndicator, StyleSheet, Alert } from "react-native";
+import { useEffect, useState } from "react";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { onAuthStateChanged, User } from "@firebase/auth";
 import { auth } from "./src/config/firebase";
 import HomeScreen from "./src/screens/Home";
 import LoginScreen from "./src/screens/Login";
 import { PaperProvider } from "react-native-paper";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import * as Notifications from "expo-notifications";
-import {
-  registerForPushNotificationsAsync,
-  addNotificationReceivedListener,
-  addNotificationResponseReceivedListener,
-} from "./src/services/notifications";
+import { getToken } from "@firebase/messaging";
+// import { messaging } from "./src/config/firebase";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -24,8 +20,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootStack() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const notificationListener = useRef<any>();
-  const responseListener = useRef<any>();
 
   const queryClient = new QueryClient();
 
@@ -38,43 +32,26 @@ function RootStack() {
     return unsubscribe;
   }, []);
 
-  // Configuration des notifications
-  useEffect(() => {
-    // Demander la permission et obtenir le token
-    registerForPushNotificationsAsync();
+  // async function requestPermission() {
+  //   //requesting permission using Notification API
+  //   const permission = await Notification.requestPermission();
 
-    // Listener pour les notifications reçues en premier plan
-    notificationListener.current = addNotificationReceivedListener(
-      (notification) => {
-        console.log("📩 Notification reçue:", notification);
-        // Vous pouvez afficher une alerte ou faire autre chose ici
-      }
-    );
+  //   if (permission === "granted") {
+  //     const token = await getToken(messaging, {
+  //       vapidKey: process.env.EXPO_PUBLIC_FIREBASE_VAPID_KEY,
+  //     });
 
-    // Listener pour les interactions avec les notifications
-    responseListener.current = addNotificationResponseReceivedListener(
-      (response) => {
-        console.log("👆 Notification cliquée:", response);
-        const data = response.notification.request.content.data;
+  //     //We can send token to server
+  //     console.log("Token generated : ", token);
+  //   } else if (permission === "denied") {
+  //     //notifications are blocked
+  //     alert("You denied for the notification");
+  //   }
+  // }
 
-        // Vous pouvez naviguer vers un écran spécifique selon les données
-        if (data?.screen) {
-          // navigation.navigate(data.screen);
-        }
-      }
-    );
-
-    return () => {
-      if (notificationListener.current) {
-        Notifications.removeNotificationSubscription(
-          notificationListener.current
-        );
-      }
-      if (responseListener.current) {
-        Notifications.removeNotificationSubscription(responseListener.current);
-      }
-    };
-  }, []);
+  // useEffect(() => {
+  //   requestPermission();
+  // }, []);
 
   if (loading) {
     return (
