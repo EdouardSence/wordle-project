@@ -1,12 +1,12 @@
-import * as Notifications from "expo-notifications";
-import { Platform } from "react-native";
-import Constants from "expo-constants";
-import { auth } from "../config/firebase";
+import { Platform } from 'react-native';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
 
-// Configuration du comportement des notifications
+const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || 'http://localhost:3000';
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: true,
     shouldShowBanner: true,
@@ -14,94 +14,118 @@ Notifications.setNotificationHandler({
   }),
 });
 
-// Fonction pour demander la permission et obtenir le token
-export async function registerForPushNotificationsAsync() {
-  let token;
+/**
+ * Register device token with backend
+ */
+export async function registerTokenWithBackend(
+  userId: string,
+  token: string
+): Promise<boolean> {
+  try {
+    const deviceId = Constants.sessionId || Device.deviceName || 'unknown-device';
+    const url = `${BACKEND_URL}/api/register-token`;
 
-  if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
+    console.log('🌐 Backend URL:', BACKEND_URL);
+    console.log('📡 Registering token to:', url);
+    console.log('📦 Payload:', { userId, token: token.slice(0, 20) + '...', deviceId });
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId,
+        token,
+        deviceId,
+      }),
+    });
+
+    console.log('📥 Response status:', response.status);
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error('❌ Failed to register token:', error);
+      return false;
+    }
+
+    const result = await response.json();
+    console.log('✅ Token registered successfully:', result);
+    return true;
+  } catch (error) {
+    console.error('❌ Error registering token with backend:', error);
+    console.error('💡 Make sure backend is running and accessible');
+    console.error('💡 Check EXPO_PUBLIC_BACKEND_URL in your environment');
+    return false;
+  }
+}
+
+/**
+ * Send test notification via Expo's service (for development)
+ */
+export async function sendPushNotification(expoPushToken: string) {
+  const message = {
+    to: expoPushToken,
+    sound: 'default',
+    title: 'Test Notification',
+    body: 'This is a test notification!',
+    data: { someData: 'goes here' },
+  };
+
+  await fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Accept-encoding': 'gzip, deflate',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(message),
+  });
+}
+
+function handleRegistrationError(errorMessage: string) {
+  alert(errorMessage);
+  throw new Error(errorMessage);
+}
+
+export async function registerForPushNotificationsAsync() {
+  if (Platform.OS === 'android') {
+    await Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#538D4E",
+      lightColor: '#FF231F7C',
     });
   }
 
-  const { status: existingStatus } = await Notifications.getPermissionsAsync();
-  let finalStatus = existingStatus;
-
-  if (existingStatus !== "granted") {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
-  }
-
-  if (finalStatus !== "granted") {
-    console.log("Permission de notification refusée");
-    return;
-  }
-
-  try {
-    const projectId = Constants.expoConfig?.extra?.eas?.projectId;
-    if (!projectId) {
-      console.warn("⚠️ Project ID non trouvé dans app.json");
+  if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      handleRegistrationError('Permission not granted to get push token for push notification!');
       return;
     }
-
-    token = (
-      await Notifications.getExpoPushTokenAsync({
-        projectId,
-      })
-    ).data;
-    console.log("✅✅✅ EXPO PUSH TOKEN ✅✅✅");
-    console.log(token);
-    console.log("✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅");
-    console.log("📌 Copiez ce token et testez sur: https://expo.dev/notifications");
-
-    // Sauvegarder le token pour l'utilisateur connecté
-    await sendTokenToServer(token);
-  } catch (error) {
-    console.log("⚠️ Token push non disponible");
-    console.log("💡 Utilisez Expo Go pour obtenir le token:");
-    console.log("   1. Fermez l'app dev client");
-    console.log("   2. Lancez: pnpm expo start");
-    console.log("   3. Scannez le QR avec Expo Go");
+    const projectId =
+      Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
+    if (!projectId) {
+      handleRegistrationError('Project ID not found');
+    }
+    try {
+      const pushTokenString = (
+        await Notifications.getExpoPushTokenAsync({
+          projectId,
+        })
+      ).data;
+      console.log(pushTokenString);
+      return pushTokenString;
+    } catch (e: unknown) {
+      handleRegistrationError(`${e}`);
+    }
+  } else {
+    handleRegistrationError('Must use physical device for push notifications');
   }
-
-  return token;
-}
-
-// Fonction pour envoyer le token au serveur (optionnel)
-export async function sendTokenToServer(token: string) {
-  const user = auth.currentUser;
-  if (!user) {
-    console.log("📱 Token obtenu mais utilisateur non connecté");
-    return;
-  }
-
-  // Ici vous pouvez envoyer le token à votre backend Firebase
-  // Par exemple avec Firestore ou Realtime Database
-  console.log("📤 Token à envoyer au serveur:", token);
-  console.log("👤 Pour l'utilisateur:", user.uid);
-
-  // Exemple pour l'envoyer à Firestore :
-  // import { doc, setDoc } from "firebase/firestore";
-  // import { db } from "../config/firebase";
-  // await setDoc(doc(db, "userTokens", user.uid), {
-  //   token,
-  //   updatedAt: new Date(),
-  // });
-}
-
-// Fonction pour gérer les notifications reçues en premier plan
-export function addNotificationReceivedListener(
-  callback: (notification: Notifications.Notification) => void
-) {
-  return Notifications.addNotificationReceivedListener(callback);
-}
-
-// Fonction pour gérer les interactions avec les notifications
-export function addNotificationResponseReceivedListener(
-  callback: (response: Notifications.NotificationResponse) => void
-) {
-  return Notifications.addNotificationResponseReceivedListener(callback);
 }
