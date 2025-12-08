@@ -11,8 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as Notifications from 'expo-notifications';
 import { 
   registerForPushNotificationsAsync, 
-  registerTokenWithBackend,
-  sendPushNotification 
+  registerTokenWithBackend, 
 } from "./src/services/notifications";
 
 export type RootStackParamList = {
@@ -146,18 +145,6 @@ function RootStack() {
             />
           )}
         </Stack.Navigator>
-        
-        {/* Debug info - remove in production */}
-        {__DEV__ && user && expoPushToken && (
-          <View style={styles.debugInfo}>
-            <Text style={styles.debugText}>🔔 Token: {expoPushToken.slice(0, 30)}...</Text>
-            {notification && (
-              <Text style={styles.debugText}>
-                📬 Last: {notification.request.content.title}
-              </Text>
-            )}
-          </View>
-        )}
       </PaperProvider>
     </QueryClientProvider>
   );
