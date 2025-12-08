@@ -1,7 +1,17 @@
-import { faker } from "@faker-js/faker";
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
-export const randomWord: string = faker.lorem.word().toUpperCase();
+let BACKEND_URL: string = process.env.EXPO_PUBLIC_BACKEND_URL || 'http://localhost:3000';
+const fetchWordOfTheDay = async () => {
+  const response = await fetch(`${BACKEND_URL}/api/word-of-the-day`);
+  const data = await response.json();
+  return data.word;
+};
+
+export let randomWord: string = "";
+
+
+
+
 
 export type LetterStatus = "correct" | "present" | "absent" | "empty";
 
@@ -12,6 +22,7 @@ export interface GuessRow {
 }
 
 export type GameStatus = "playing" | "won" | "lost";
+
 
 interface KeyContextType {
   keys: string[];
@@ -31,16 +42,16 @@ interface KeyContextType {
 
 export const KeyContext = createContext<KeyContextType>({
   keys: [],
-  setKeys: () => {},
+  setKeys: () => { },
   guesses: [],
-  setGuesses: () => {},
+  setGuesses: () => { },
   currentRow: 0,
-  setCurrentRow: () => {},
+  setCurrentRow: () => { },
   keyboardColors: {},
-  setKeyboardColors: () => {},
-  submitGuess: () => {},
+  setKeyboardColors: () => { },
+  submitGuess: () => { },
   gameStatus: "playing",
-  setGameStatus: () => {},
+  setGameStatus: () => { },
 });
 
 const createEmptyGuesses = (): GuessRow[] => {
@@ -60,6 +71,14 @@ export const LogicProvider = ({ children }: { children: ReactNode }) => {
   >({});
   const [gameStatus, setGameStatus] = useState<GameStatus>("playing");
 
+  useEffect(() => {
+    fetchWordOfTheDay().then(word => {
+      randomWord = word;
+      console.log('🎯 Word of the day fetched:', randomWord);
+    }).catch(error => {
+      console.error('❌ Error fetching word of the day:', error);
+    });
+  }, []);
   const submitGuess = () => {
     if (keys.length !== randomWord.length || currentRow >= 6) return;
 

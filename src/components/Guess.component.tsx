@@ -64,10 +64,13 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     marginBottom: 6,
+    justifyContent: "center",
+    width: "100%",
   },
   letterBox: {
-    width: 50,
-    height: 50,
+    flex: 1,
+    maxWidth: 50,
+    aspectRatio: 1,
     borderColor: "#3A3A3C",
     borderWidth: 2,
     borderRadius: 4,
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
   },
   letter: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#FFFFFF",
     textAlign: "center",

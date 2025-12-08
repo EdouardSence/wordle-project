@@ -40,3 +40,10 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+/generated
+
+# google services
+google-services.json
+
+# fcm config
+wordle-fcm.json
