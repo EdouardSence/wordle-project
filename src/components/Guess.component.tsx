@@ -22,6 +22,11 @@ const getBackgroundColor = (status: LetterStatus): string => {
 const Guess = () => {
   const { keys, guesses, currentRow } = useContext(KeyContext);
 
+  // Ne rien afficher si les guesses ne sont pas encore initialisées
+  if (guesses.length === 0 || randomWord.length === 0) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       {guesses.map((guess, rowIndex) => (

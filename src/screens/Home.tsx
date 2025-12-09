@@ -84,7 +84,7 @@ export default function HomeScreen() {
       </View>
 
       <LogicProvider>
-        <Text style={styles.message}>{randomWord}</Text>
+        {/* <Text style={styles.message}>{randomWord}</Text> */}
 
         <GameContent />
       </LogicProvider>

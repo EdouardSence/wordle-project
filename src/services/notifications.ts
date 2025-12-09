@@ -22,7 +22,7 @@ export async function registerTokenWithBackend(
   token: string
 ): Promise<boolean> {
   try {
-    const deviceId = Constants.sessionId || Device.deviceName || 'unknown-device';
+    const deviceId = Device.deviceName || 'unknown-device';
     const url = `${BACKEND_URL}/api/register-token`;
 
     console.log('🌐 Backend URL:', BACKEND_URL);

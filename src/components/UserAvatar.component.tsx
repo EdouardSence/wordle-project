@@ -50,12 +50,12 @@ export default function UserAvatar() {
             >
               {auth.currentUser?.email}
             </Text>
-            <Pressable
+            {/* <Pressable
               style={styles.menuItem}
               onPress={() => handleChangePassword()}
             >
               <Text style={styles.menuText}>Changer le mot de passe</Text>
-            </Pressable>
+            </Pressable> */}
             <Pressable style={styles.menuItem} onPress={handleLogout}>
               <Text style={styles.menuText}>Se déconnecter</Text>
             </Pressable>

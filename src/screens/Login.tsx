@@ -9,6 +9,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  ScrollView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { auth } from "../config/firebase";
 import {
@@ -65,100 +68,107 @@ export default function LoginScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <View style={styles.content}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.logo}>🎯</Text>
-          <Text style={styles.title}>WORDLE</Text>
-          <Text style={styles.subtitle}>
-            {isLogin ? "Connectez-vous pour jouer" : "Créez votre compte"}
-          </Text>
-        </View>
-
-        {/* Form */}
-        <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={[
-                styles.input,
-                focusedInput === "email" && styles.inputFocused,
-              ]}
-              placeholder="Email"
-              placeholderTextColor="#666"
-              value={email}
-              onChangeText={setEmail}
-              onFocus={() => setFocusedInput("email")}
-              onBlur={() => setFocusedInput(null)}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              editable={!loading}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Mot de passe</Text>
-            <TextInput
-              style={[
-                styles.input,
-                focusedInput === "password" && styles.inputFocused,
-              ]}
-              placeholder="Password"
-              placeholderTextColor="#666"
-              value={password}
-              onChangeText={setPassword}
-              onFocus={() => setFocusedInput("password")}
-              onBlur={() => setFocusedInput(null)}
-              secureTextEntry
-              editable={!loading}
-            />
-          </View>
-
-          {/* Main Button */}
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleAuth}
-            disabled={loading}
-            activeOpacity={0.8}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>
-                {isLogin ? "Se connecter" : "Créer un compte"}
-              </Text>
-            )}
-          </TouchableOpacity>
-
-          {/* Toggle Login/Register */}
-          <View style={styles.toggleContainer}>
-            <Text style={styles.toggleText}>
-              {isLogin ? "Pas encore de compte ?" : "Déjà un compte ?"}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+      >
+        <ScrollView 
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Header */}
+          <View style={styles.header}>
+            <Text style={styles.logo}>🎯</Text>
+            <Text style={styles.title}>WORDLE</Text>
+            <Text style={styles.subtitle}>
+              {isLogin ? "Connectez-vous pour jouer" : "Créez votre compte"}
             </Text>
-            <TouchableOpacity
-              onPress={() => setIsLogin(!isLogin)}
-              disabled={loading}
-            >
-              <Text style={styles.toggleButton}>
-                {isLogin ? "S'inscrire" : "Se connecter"}
-              </Text>
-            </TouchableOpacity>
           </View>
-        </View>
 
-        {/* Footer */}
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Devinez le mot en 6 essais maximum
-          </Text>
-        </View>
-      </View>
-    </KeyboardAvoidingView>
+          {/* Form */}
+          <View style={styles.form}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Email</Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  focusedInput === "email" && styles.inputFocused,
+                ]}
+                placeholder="Email"
+                placeholderTextColor="#666"
+                value={email}
+                onChangeText={setEmail}
+                onFocus={() => setFocusedInput("email")}
+                onBlur={() => setFocusedInput(null)}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                editable={!loading}
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Mot de passe</Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  focusedInput === "password" && styles.inputFocused,
+                ]}
+                placeholder="Password"
+                placeholderTextColor="#666"
+                value={password}
+                onChangeText={setPassword}
+                onFocus={() => setFocusedInput("password")}
+                onBlur={() => setFocusedInput(null)}
+                secureTextEntry
+                editable={!loading}
+              />
+            </View>
+
+            {/* Main Button */}
+            <TouchableOpacity
+              style={[styles.button, loading && styles.buttonDisabled]}
+              onPress={handleAuth}
+              disabled={loading}
+              activeOpacity={0.8}
+            >
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>
+                  {isLogin ? "Se connecter" : "Créer un compte"}
+                </Text>
+              )}
+            </TouchableOpacity>
+
+            {/* Toggle Login/Register */}
+            <View style={styles.toggleContainer}>
+              <Text style={styles.toggleText}>
+                {isLogin ? "Pas encore de compte ?" : "Déjà un compte ?"}
+              </Text>
+              <TouchableOpacity
+                onPress={() => setIsLogin(!isLogin)}
+                disabled={loading}
+              >
+                <Text style={styles.toggleButton}>
+                  {isLogin ? "S'inscrire" : "Se connecter"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Footer */}
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>
+              Devinez le mot en 6 essais maximum
+            </Text>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -167,8 +177,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#121213",
   },
-  content: {
-    flex: 1,
+  scrollContent: {
+    flexGrow: 1,
     paddingHorizontal: 24,
     paddingTop: 60,
     paddingBottom: 40,
